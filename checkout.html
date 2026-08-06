@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finalizar Compra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-black: #0a0908;
+    --bg-gray: #17161a;
+    --card-bg: #1c1a1e;
+    --field-bg: #141215;
+    --border-red: #4a0f10;
+    --border-red-hover: #6e1416;
+    --text-main: #e9e6e2;
+    --text-dim: #9a958f;
+    --accent-ember: #b3402f;
+    --white: #f5f3ef;
+    --error: #d94b4b;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg-black);
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+    min-height: 100%;
+  }
+
+  body {
+    background:
+      radial-gradient(ellipse 900px 500px at 50% -10%, rgba(74,15,16,0.25), transparent 60%),
+      linear-gradient(180deg, var(--bg-black) 0%, var(--bg-gray) 100%);
+    background-attachment: fixed;
+  }
+
+  header {
+    padding: 56px 24px 24px;
+    text-align: center;
+  }
+
+  .eyebrow {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--accent-ember);
+    margin-bottom: 14px;
+  }
+
+  h1.title {
+    font-family: 'Cinzel', serif;
+    font-weight: 900;
+    font-size: clamp(26px, 5vw, 42px);
+    letter-spacing: 1.5px;
+    margin: 0;
+    color: var(--white);
+  }
+
+  .divider {
+    width: 110px;
+    height: 1px;
+    margin: 20px auto 0;
+    background: linear-gradient(90deg, transparent, var(--border-red-hover), transparent);
+  }
+
+  main {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 10px 20px 100px;
+  }
+
+  .back-link {
+    display: inline-block;
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 13px;
+    margin-bottom: 22px;
+    transition: color 0.2s ease;
+  }
+  .back-link:hover { color: var(--white); }
+
+  .order-summary {
+    background: var(--card-bg);
+    border: 1px solid var(--border-red);
+    border-radius: 6px;
+    padding: 18px 22px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .order-summary .label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent-ember);
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .order-summary .product-name {
+    font-family: 'Cinzel', serif;
+    font-size: 17px;
+    color: var(--white);
+    margin: 0;
+  }
+
+  .order-summary .product-price {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--white);
+  }
+
+  fieldset {
+    border: 1px solid var(--border-red);
+    border-radius: 6px;
+    padding: 22px 20px 24px;
+    margin: 0 0 26px;
+  }
+
+  legend {
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--white);
+    padding: 0 10px;
+  }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .field {
+    margin-bottom: 16px;
+  }
+
+  .field:last-child { margin-bottom: 0; }
+
+  label {
+    display: block;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    color: var(--text-dim);
+    margin-bottom: 7px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"] {
+    width: 100%;
+    background: var(--field-bg);
+    border: 1px solid #3a3639;
+    border-radius: 4px;
+    padding: 12px 13px;
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    transition: border-color 0.2s ease;
+  }
+
+  input:focus {
+    outline: none;
+    border-color: var(--accent-ember);
+  }
+
+  input::placeholder { color: #6a6569; }
+
+  .payment-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .payment-option {
+    position: relative;
+  }
+
+  .payment-option input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    cursor: pointer;
+  }
+
+  .payment-option .box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 16px 8px;
+    border: 1px solid #3a3639;
+    border-radius: 6px;
+    background: var(--field-bg);
+    text-align: center;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+  }
+
+  .payment-option .box svg {
+    width: 22px;
+    height: 22px;
+    stroke: var(--text-dim);
+    fill: none;
+    stroke-width: 1.5;
+    transition: stroke 0.2s ease;
+  }
+
+  .payment-option input:checked + .box {
+    border-color: var(--border-red-hover);
+    color: var(--white);
+    background: #221f24;
+  }
+
+  .payment-option input:checked + .box svg { stroke: var(--accent-ember); }
+
+  .payment-option input:focus-visible + .box {
+    outline: 2px solid var(--accent-ember);
+    outline-offset: 2px;
+  }
+
+  .card-fields {
+    display: none;
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px dashed #3a3639;
+  }
+
+  .card-fields.visible { display: block; }
+
+  .hint {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+
+  .submit-btn {
+    width: 100%;
+    background: var(--white);
+    color: #12100f;
+    border: none;
+    border-radius: 4px;
+    padding: 16px 18px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease;
+  }
+
+  .submit-btn:hover { background: #d8d4cd; }
+  .submit-btn:active { transform: scale(0.99); }
+
+  .confirmation {
+    display: none;
+    text-align: center;
+    padding: 50px 20px;
+  }
+
+  .confirmation.visible { display: block; }
+
+  .confirmation .icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 20px;
+    stroke: var(--accent-ember);
+    fill: none;
+    stroke-width: 1.4;
+  }
+
+  .confirmation h2 {
+    font-family: 'Cinzel', serif;
+    color: var(--white);
+    font-size: 24px;
+    margin: 0 0 12px;
+  }
+
+  .confirmation p {
+    color: var(--text-dim);
+    font-size: 14px;
+    max-width: 420px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  footer {
+    text-align: center;
+    padding: 30px 20px 50px;
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+
+  @media (max-width: 560px) {
+    .field-row { grid-template-columns: 1fr; }
+    .payment-options { grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+    .payment-option .box { padding: 12px 6px; font-size: 10.5px; }
+    fieldset { padding: 18px 14px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="eyebrow">Coleção Caçadores</span>
+  <h1 class="title">Finalizar Compra</h1>
+  <div class="divider"></div>
+</header>
+
+<main>
+  <a class="back-link" href="index.html">&larr; Voltar para a lista de produtos</a>
+
+  <div class="order-summary">
+    <div>
+      <span class="label">Produto</span>
+      <p class="product-name" id="produtoNome">—</p>
+    </div>
+    <div class="product-price" id="produtoPreco">—</div>
+  </div>
+
+  <form id="checkoutForm">
+    <fieldset>
+      <legend>Dados Pessoais</legend>
+      <div class="field">
+        <label for="nome">Nome completo</label>
+        <input type="text" id="nome" name="nome" placeholder="Ex: Dean Winchester" required>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="email">E-mail</label>
+          <input type="email" id="email" name="email" placeholder="seuemail@exemplo.com" required>
+        </div>
+        <div class="field">
+          <label for="telefone">Telefone</label>
+          <input type="tel" id="telefone" name="telefone" placeholder="(00) 00000-0000" required>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Endereço de Entrega</legend>
+      <div class="field-row">
+        <div class="field">
+          <label for="cep">CEP</label>
+          <input type="text" id="cep" name="cep" placeholder="00000-000" required>
+        </div>
+        <div class="field">
+          <label for="cidade">Cidade / UF</label>
+          <input type="text" id="cidade" name="cidade" placeholder="Ex: Lawrence, KS" required>
+        </div>
+      </div>
+      <div class="field">
+        <label for="endereco">Endereço (rua, número, complemento)</label>
+        <input type="text" id="endereco" name="endereco" placeholder="Rua, número, bairro, complemento" required>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Forma de Pagamento</legend>
+      <div class="payment-options">
+        <label class="payment-option">
+          <input type="radio" name="pagamento" value="boleto" checked>
+          <span class="box">
+            <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1"/><line x1="6" y1="9" x2="6" y2="15"/><line x1="9" y1="9" x2="9" y2="15"/><line x1="13" y1="9" x2="13" y2="15"/><line x1="17" y1="9" x2="17" y2="15"/></svg>
+            Boleto
+          </span>
+        </label>
+        <label class="payment-option">
+          <input type="radio" name="pagamento" value="pix">
+          <span class="box">
+            <svg viewBox="0 0 24 24"><path d="M12 3 L21 12 L12 21 L3 12 Z"/><circle cx="12" cy="12" r="2.6"/></svg>
+            Pix
+          </span>
+        </label>
+        <label class="payment-option">
+          <input type="radio" name="pagamento" value="cartao">
+          <span class="box">
+            <svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="13" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><line x1="5" y1="15" x2="10" y2="15"/></svg>
+            Cartão
+          </span>
+        </label>
+      </div>
+
+      <p class="hint" id="boletoHint">O boleto será gerado após a confirmação do pedido, com vencimento em 3 dias úteis.</p>
+      <p class="hint" id="pixHint" style="display:none;">O QR Code Pix será exibido na próxima tela, com pagamento aprovado na hora.</p>
+
+      <div class="card-fields" id="cardFields">
+        <div class="field">
+          <label for="cardNome">Nome impresso no cartão</label>
+          <input type="text" id="cardNome" name="cardNome" placeholder="Como está no cartão">
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="cardNumero">Número do cartão</label>
+            <input type="text" id="cardNumero" name="cardNumero" placeholder="0000 0000 0000 0000" inputmode="numeric" maxlength="19">
+          </div>
+          <div class="field">
+            <label for="cardValidade">Validade</label>
+            <input type="text" id="cardValidade" name="cardValidade" placeholder="MM/AA" maxlength="5">
+          </div>
+        </div>
+        <div class="field">
+          <label for="cardCvv">CVV</label>
+          <input type="text" id="cardCvv" name="cardCvv" placeholder="000" inputmode="numeric" maxlength="4">
+        </div>
+      </div>
+    </fieldset>
+
+    <button type="submit" class="submit-btn">Confirmar Pedido</button>
+  </form>
+
+  <div class="confirmation" id="confirmation">
+    <svg class="icon" viewBox="0 0 64 64"><circle cx="32" cy="32" r="28"/><path d="M20 33 L28 41 L46 22"/></svg>
+    <h2>Pedido recebido!</h2>
+    <p>Seu pedido foi registrado com sucesso. As instruções de pagamento foram enviadas para o e-mail informado. Obrigado por comprar com a gente, caçador(a).</p>
+  </div>
+</main>
+
+<footer>
+  &copy; 2026 Loja de Colecionáveis · Produtos de fã não licenciados
+</footer>
+
+<script>
+  // Preenche o resumo do pedido a partir dos parâmetros da URL
+  const params = new URLSearchParams(window.location.search);
+  const produto = params.get('produto') || 'Produto selecionado';
+  const preco = params.get('preco') || '—';
+  document.getElementById('produtoNome').textContent = produto;
+  document.getElementById('produtoPreco').textContent = preco;
+
+  // Alterna os campos e dicas de acordo com a forma de pagamento
+  const radios = document.querySelectorAll('input[name="pagamento"]');
+  const cardFields = document.getElementById('cardFields');
+  const boletoHint = document.getElementById('boletoHint');
+  const pixHint = document.getElementById('pixHint');
+
+  function atualizarPagamento() {
+    const selecionado = document.querySelector('input[name="pagamento"]:checked').value;
+    cardFields.classList.toggle('visible', selecionado === 'cartao');
+    boletoHint.style.display = selecionado === 'boleto' ? 'block' : 'none';
+    pixHint.style.display = selecionado === 'pix' ? 'block' : 'none';
+
+    const cardNumero = document.getElementById('cardNumero');
+    const cardValidade = document.getElementById('cardValidade');
+    const cardCvv = document.getElementById('cardCvv');
+    const cardNomeInput = document.getElementById('cardNome');
+    const obrigatorio = selecionado === 'cartao';
+    [cardNumero, cardValidade, cardCvv, cardNomeInput].forEach(el => el.required = obrigatorio);
+  }
+
+  radios.forEach(r => r.addEventListener('change', atualizarPagamento));
+  atualizarPagamento();
+
+  // Envio do formulário (demonstração, sem back-end real)
+  document.getElementById('checkoutForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    this.style.display = 'none';
+    document.getElementById('confirmation').classList.add('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>
