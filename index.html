@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lista de Produtos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-black: #0a0908;
+    --bg-gray: #17161a;
+    --card-bg: #1c1a1e;
+    --card-bg-hover: #221f24;
+    --border-red: #4a0f10;
+    --border-red-hover: #6e1416;
+    --text-main: #e9e6e2;
+    --text-dim: #9a958f;
+    --accent-ember: #b3402f;
+    --white: #f5f3ef;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg-black);
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+    min-height: 100%;
+  }
+
+  body {
+    background:
+      radial-gradient(ellipse 900px 500px at 50% -10%, rgba(74,15,16,0.25), transparent 60%),
+      linear-gradient(180deg, var(--bg-black) 0%, var(--bg-gray) 100%);
+    background-attachment: fixed;
+  }
+
+  /* símbolo circular sutil de fundo, puramente decorativo/genérico */
+  .sigil-bg {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: min(900px, 140vw);
+    height: min(900px, 140vw);
+    transform: translate(-50%, -50%);
+    opacity: 0.035;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  header {
+    position: relative;
+    z-index: 1;
+    padding: 64px 24px 28px;
+    text-align: center;
+  }
+
+  .eyebrow {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--accent-ember);
+    margin-bottom: 14px;
+  }
+
+  h1.title {
+    font-family: 'Cinzel', serif;
+    font-weight: 900;
+    font-size: clamp(32px, 6vw, 56px);
+    letter-spacing: 2px;
+    margin: 0;
+    color: var(--white);
+    text-shadow: 0 0 30px rgba(179,64,47,0.35);
+  }
+img{
+    height: 235px;
+}
+  .divider {
+    width: 120px;
+    height: 1px;
+    margin: 22px auto 0;
+    background: linear-gradient(90deg, transparent, var(--border-red-hover), transparent);
+  }
+
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 20px 24px 100px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 26px;
+  }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-red);
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .card:hover {
+    border-color: var(--border-red-hover);
+    transform: translateY(-4px);
+    box-shadow: 0 14px 30px -12px rgba(179,64,47,0.35);
+    background: var(--card-bg-hover);
+  }
+
+  .card-image {
+    aspect-ratio: 1 / 1;
+    background: #0f0e11;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid var(--border-red);
+    padding: 22px;
+  }
+
+  .card-image svg {
+    width: 62%;
+    height: 62%;
+    stroke: var(--text-dim);
+    fill: none;
+    stroke-width: 1.3;
+  }
+
+  .card:hover .card-image svg {
+    stroke: var(--accent-ember);
+  }
+
+  .card-body {
+    padding: 18px 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+  }
+
+  .card-tag {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent-ember);
+  }
+
+  .card-name {
+    font-family: 'Cinzel', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.3;
+    margin: 0;
+  }
+
+  .card-price {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-top: auto;
+  }
+
+  .card-price .cents { font-size: 13px; color: var(--text-dim); }
+
+  .buy-btn {
+    margin-top: 6px;
+    background: var(--white);
+    color: #12100f;
+    border: none;
+    border-radius: 4px;
+    padding: 13px 18px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease;
+  }
+
+  .buy-btn:hover { background: #d8d4cd; }
+  .buy-btn:active { transform: scale(0.97); }
+  .buy-btn:focus-visible {
+    outline: 2px solid var(--accent-ember);
+    outline-offset: 2px;
+  }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 30px 20px 50px;
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+
+  @media (max-width: 480px) {
+    header { padding: 44px 18px 20px; }
+    main { padding: 10px 16px 70px; }
+    .grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; }
+    .card-name { font-size: 15px; }
+    .card-price { font-size: 17px; }
+    .buy-btn { padding: 11px 14px; font-size: 11px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<svg class="sigil-bg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="100" cy="100" r="95" stroke="#b3402f" stroke-width="0.6" fill="none"/>
+  <circle cx="100" cy="100" r="75" stroke="#b3402f" stroke-width="0.6" fill="none"/>
+  <polygon points="100,15 179,145 21,145" stroke="#b3402f" stroke-width="0.6" fill="none"/>
+  <polygon points="100,185 21,55 179,55" stroke="#b3402f" stroke-width="0.6" fill="none"/>
+</svg>
+
+<header>
+  <span class="eyebrow">Coleção Caçadores</span>
+  <h1 class="title">Lista de Produtos</h1>
+  <div class="divider"></div>
+</header>
+
+<main>
+  <div class="grid">
+
+    <!-- Camiseta -->
+    <div class="card">
+      <div class="card-image">
+        <img src="https://down-br.img.susercontent.com/file/br-11134201-7r98o-lqzl32ahbaxi36" alt="">
+      </div>
+      <div class="card-body">
+        <span class="card-tag">Camiseta</span>
+        <p class="card-name">Camiseta Símbolo Anti-Possessão</p>
+        <p class="card-price">R$ 79<span class="cents">,90</span></p>
+        <button class="buy-btn">Comprar</button>
+      </div>
+    </div>
+
+    <!-- Camiseta com nome -->
+    <div class="card">
+      <div class="card-image">
+       <img src="https://images.tcdn.com.br/img/img_prod/460977/camiseta_unissex_friends_winchersters_sobrenatural_supernatural_meme_preto_cd_116105_1_ed1a6e2ab67c436619eac36612663cac.jpeg" alt="">
+      </div>
+      <div class="card-body">
+        <span class="card-tag">Camiseta Personalizada</span>
+        <p class="card-name">Camiseta "Friends" com Nome</p>
+        <p class="card-price">R$ 89<span class="cents">,90</span></p>
+        <button class="buy-btn">Comprar</button>
+      </div>
+    </div>
+
+    <!-- Jaqueta -->
+    <div class="card">
+      <div class="card-image">
+       <img src="https://i.etsystatic.com/57468094/r/il/5da1a9/7391176728/il_fullxfull.7391176728_oga0.jpg" alt="">
+      </div>
+      <div class="card-body">
+        <span class="card-tag">Jaqueta</span>
+        <p class="card-name">Jaqueta de Couro Estilo Caçador</p>
+        <p class="card-price">R$ 249<span class="cents">,90</span></p>
+        <button class="buy-btn">Comprar</button>
+      </div>
+    </div>
+
+    <!-- Copo sem nome -->
+    <div class="card">
+      <div class="card-image">
+        <img src="https://http2.mlstatic.com/D_NQ_NP_2X_851986-MLB112025347090_062026-F-copo-1200ml-garrafa-termica-personalizada-supernatural.webp" alt="">
+      </div>
+      <div class="card-body">
+        <span class="card-tag">Copo</span>
+        <p class="card-name">Caneca Térmica Caçadores de Sombras</p>
+        <p class="card-price">R$ 89<span class="cents">,90</span></p>
+        <button class="buy-btn">Comprar</button>
+      </div>
+    </div>
+
+    <!-- Copo com nome -->
+    <div class="card">
+      <div class="card-image">
+        <img src="https://down-br.img.susercontent.com/file/br-11134207-7r98o-lnp6o84ugzbgbe" alt="">
+      </div>
+      <div class="card-body">
+        <span class="card-tag">Copo Personalizado</span>
+        <p class="card-name">Caneca Personalizada com Nome</p>
+        <p class="card-price">R$ 69<span class="cents">,90</span></p>
+        <button class="buy-btn">Comprar</button>
+      </div>
+    </div>
+
+    <!-- Chaveiro -->
+    <div class="card">
+      <div class="card-image">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqlcOcPrIeUlqnuK0HuNwwOCdwALpY9GBjgxrlJqoIy_bJqS3632U36mZL&s=10" alt="">
+      </div>
+      <div class="card-body">
+        <span class="card-tag">Chaveiro</span>
+        <p class="card-name">Chaveiro Amuleto Protetor</p>
+        <p class="card-price">R$ 34<span class="cents">,90</span></p>
+        <button class="buy-btn">Comprar</button>
+      </div>
+    </div>
+
+    <!-- Chaveiro com nome -->
+    <div class="card">
+      <div class="card-image">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSv8jelChSsC4cS-6Rtn4XymPtE8_346gQ2N2rwItiFZXaiMSxsEUeU_4I&s=10" alt="">
+      </div>
+      <div class="card-body">
+        <span class="card-tag">Chaveiro Personalizado</span>
+        <p class="card-name">Chaveiro com Nome Gravado</p>
+        <p class="card-price">R$ 39<span class="cents">,90</span></p>
+        <button class="buy-btn">Comprar</button>
+      </div>
+    </div>
+
+    <!-- Capinha de celular -->
+    <div class="card">
+      <div class="card-image">
+        <img src="https://down-br.img.susercontent.com/file/sg-11134201-8257y-mg4t3g93lybs3c" alt="">
+      </div>
+      <div class="card-body">
+        <span class="card-tag">Capinha de Celular</span>
+        <p class="card-name">Capinha Impala Sobrenatural</p>
+        <p class="card-price">R$ 49<span class="cents">,90</span></p>
+        <button class="buy-btn">Comprar</button>
+      </div>
+    </div>
+
+    <!-- Capinha com nome -->
+    <div class="card">
+      <div class="card-image">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_w0-3cxDG2Zan4H0UaXkk3_0JJ2Jlq6Cwa8h9R_FVYexERNO4iLaG5GA&s=10" alt="">
+      </div>
+      <div class="card-body">
+        <span class="card-tag">Capinha Personalizada</span>
+        <p class="card-name">Capinha Personalizada com Nome</p>
+        <p class="card-price">R$ 49<span class="cents">,90</span></p>
+        <button class="buy-btn">Comprar</button>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  &copy; 2026 Loja de Colecionáveis · Produtos de fã não licenciados
+</footer>
+
+</body>
+</html>
